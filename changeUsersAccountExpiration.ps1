@@ -24,14 +24,16 @@
 
 
 $usernames = @()
+Read-Host "Enter username below."
 
 Do{
-    $input = (Read-Host "Enter username, type DONE to exit")
-    if($input -ne 'DONE'){
+    $input = (Read-Host "input username")
+    $input2 = (Read-Host "More users, y or n?")
+    #if($input2 -ne 'n'){
         $usernames += $input
-        }
+  #      }
 
-}Until($input -eq 'DONE')
+}Until($input2 -eq 'n')
 
 
 
