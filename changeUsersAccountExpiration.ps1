@@ -37,25 +37,28 @@ Do{
 
 $usernames
 
-#insert exceptionHandling
+# Insert exceptionHandling
 
 
 # Get new expiration date
 
 $newDate = (Read-Host "Enter new Expiration Date with Format MM/DD/YYYY")
 
-#insert exceptionHandling
+# Insert exceptionHandling
+
+
+# Read array and set expiration date to new date
 
 
 foreach($u in $usernames){
     
-    Set-ADAccountExpiration -Identity $u -DateTime $newDate
+    Set-ADAccountExpiration -Identity $u -DateTime [datetime]$newDate
 
 }
 
 
+# Display List of users and their new expiration date
 
-# Read array and set expiration date to new date
 
 foreach($u in $usernames){
 
