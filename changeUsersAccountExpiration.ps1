@@ -42,17 +42,24 @@ $usernames
 
 # Get new expiration date
 
-$newDate = (Read-Host "Enter new Expiration Date with Format MM/DD/YYYY")
+$readDate = (Read-Host "Enter new Expiration Date with Format MM/DD/YYYY")
+
+
+
 
 # Insert exceptionHandling
 
 
+
+# Convert String to DateTime object, Minutes added because Time defaults to 
+$stringToDate = $readDate | Get-Date
+$expDate = $stringToDate.AddDays(1)
+
+$stringToDate
 # Read array and set expiration date to new date
-
-
 foreach($u in $usernames){
-    
-    Set-ADAccountExpiration -Identity $u -DateTime [datetime]$newDate
+   
+    Set-ADAccountExpiration -Identity $u -DateTime $expDate
 
 }
 
@@ -62,6 +69,7 @@ foreach($u in $usernames){
 
 foreach($u in $usernames){
 
-    Get-ADUser -Identity $u –Properties "DisplayName", "msDS-UserPasswordExpiryTimeComputed" | Select-Object -Property "Displayname",@{Name="ExpiryDate";Expression={[datetime]::FromFileTime($_."msDS-UserPasswordExpiryTimeComputed")}}
+  
+get-aduser $u  -Properties * | Select-Object -Property "samAccountName",  @{Name=“AccountExpires”;Expression={[datetime]::FromFileTime($_.Accountexpires)}}
 
 }
