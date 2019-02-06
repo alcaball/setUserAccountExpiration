@@ -10,17 +10,16 @@
 # Created:
 #     1/30/2019
 # Last Updated:
-#     1/30/2019
+#     2/6/2019
 
 
 
 
 <# ------------------Start Code----------------  #>
 
-# Part 1 Get user input
 
 # Get user input via command line and save input to an array
-# When user is done, user inputs string 'END' which will mark the end of the array
+# When user is done, user inputs string 'DONE' which will mark the end of the array
 
 
 $usernames = @()
@@ -35,28 +34,22 @@ Do{
 
 
 
-$usernames
+Write-Host "Usernames:"
+Write-Host $usernames
 
 # Insert exceptionHandling
+
 
 
 # Get new expiration date
-
-$readDate = (Read-Host "Enter new Expiration Date with Format MM/DD/YYYY")
-
-
-
+$newDate = Get-NewExpirationDate | Get-Date
+$expDate = $newDate.AddDays(1)
 
 # Insert exceptionHandling
 
 
-
-# Convert String to DateTime object, Minutes added because Time defaults to 
-$stringToDate = $readDate | Get-Date
-$expDate = $stringToDate.AddDays(1)
-
-$stringToDate
 # Read array and set expiration date to new date
+
 foreach($u in $usernames){
    
     Set-ADAccountExpiration -Identity $u -DateTime $expDate
@@ -70,6 +63,47 @@ foreach($u in $usernames){
 foreach($u in $usernames){
 
   
-get-aduser $u  -Properties * | Select-Object -Property "samAccountName",  @{Name=“AccountExpires”;Expression={[datetime]::FromFileTime($_.Accountexpires)}}
+    Get-ADuser $u  -Properties * | Select-Object -Property "samAccountName",  @{Name=“AccountExpires”;Expression={[datetime]::FromFileTime($_.Accountexpires)}}
 
+}
+
+
+write-host "Process is complete" -foregroundcolor magenta
+Write-Host "`n`n`n"
+write-host "Press any key to exit..." 
+Write-Host "`n`n`n"
+
+$x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+
+
+
+# Function Name: Get-NewExpirationDate
+# Parameters: None
+# Return value : $expDate ; DateTime object
+# Purpose: Function will get the current date, adds 90 days from current date, calculates the current date's day of the week and calculates the nearest thursday from that date
+
+function Get-NewExpirationDate {
+
+    $todayDate = Get-Date
+    
+    $plus90Days = $todayDate.AddDays(90)
+    
+    $dayOfTheWeek = $plus90Days.DayOfWeek
+
+    
+    switch($dayOfTheWeek) {
+     
+    
+        'Sunday'  { $expDate = $plus90Days.AddDays(-3) ; break  }
+        'Monday'  {  $expDate = $plus90Days.AddDays(-4) ; break  }
+        'Tuesday'  {  $expDate = $plus90Days.AddDays(2) ; break  }
+        'Wednesday'  {  $expDate = $plus90Days.AddDays(1) ; break  }
+        'Thursday'  { $expDate = $plus90Days ;  break  }
+        'Friday'  {  $expDate = $plus90Days.AddDays(-1) ; break  }
+        'Saturday'  {  $expDate = $plus90Days.AddDays(-2) ; break  }
+    }
+
+
+    return $expDate
 }
