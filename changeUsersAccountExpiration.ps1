@@ -13,6 +13,36 @@
 #     2/6/2019
 
 
+# Function Name: Get-NewExpirationDate
+# Parameters: None
+# Return value : $expDate ; DateTime object
+# Purpose: Function will get the current date, adds 90 days from current date, calculates the current date's day of the week and calculates the nearest thursday from that date
+
+function Get-NewExpirationDate {
+
+    $todayDate = Get-Date
+    
+    $plus90Days = $todayDate.AddDays(90)
+    
+    $dayOfTheWeek = $plus90Days.DayOfWeek
+
+    
+    switch($dayOfTheWeek) {
+     
+    
+        'Sunday'  { $expDate = $plus90Days.AddDays(-3) ; break  }
+        'Monday'  {  $expDate = $plus90Days.AddDays(-4) ; break  }
+        'Tuesday'  {  $expDate = $plus90Days.AddDays(2) ; break  }
+        'Wednesday'  {  $expDate = $plus90Days.AddDays(1) ; break  }
+        'Thursday'  { $expDate = $plus90Days ;  break  }
+        'Friday'  {  $expDate = $plus90Days.AddDays(-1) ; break  }
+        'Saturday'  {  $expDate = $plus90Days.AddDays(-2) ; break  }
+    }
+
+
+    return $expDate
+}
+
 
 
 <# ------------------Start Code----------------  #>
@@ -78,32 +108,3 @@ $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
 
 
 
-# Function Name: Get-NewExpirationDate
-# Parameters: None
-# Return value : $expDate ; DateTime object
-# Purpose: Function will get the current date, adds 90 days from current date, calculates the current date's day of the week and calculates the nearest thursday from that date
-
-function Get-NewExpirationDate {
-
-    $todayDate = Get-Date
-    
-    $plus90Days = $todayDate.AddDays(90)
-    
-    $dayOfTheWeek = $plus90Days.DayOfWeek
-
-    
-    switch($dayOfTheWeek) {
-     
-    
-        'Sunday'  { $expDate = $plus90Days.AddDays(-3) ; break  }
-        'Monday'  {  $expDate = $plus90Days.AddDays(-4) ; break  }
-        'Tuesday'  {  $expDate = $plus90Days.AddDays(2) ; break  }
-        'Wednesday'  {  $expDate = $plus90Days.AddDays(1) ; break  }
-        'Thursday'  { $expDate = $plus90Days ;  break  }
-        'Friday'  {  $expDate = $plus90Days.AddDays(-1) ; break  }
-        'Saturday'  {  $expDate = $plus90Days.AddDays(-2) ; break  }
-    }
-
-
-    return $expDate
-}
