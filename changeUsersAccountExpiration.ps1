@@ -23,6 +23,18 @@
 # Return value : $expDate ; DateTime object
 # Purpose: Function will get the current date, adds 90 days from current date, calculates the current date's day of the week and calculates the nearest thursday from that date
 
+
+
+
+
+
+# Function Name: Get-NewExpirationDate
+# Parameters: None
+# Return value : $expDate ; DateTime object
+# Purpose: Function will get the current date, adds 90 days from current date, calculates the current date's day of the week and calculates the nearest thursday from that date
+
+
+
 function Get-NewExpirationDate {
 
     $todayDate = Get-Date
@@ -95,6 +107,12 @@ foreach($u in $usernames){
 # Display List of users and their new expiration date
 
 
+write-host "Pausing for 15 seconds to update Account Expiration Dates" -foregroundcolor yellow
+Write-Host "`n`n`n"
+
+start-sleep -s 15
+
+
 foreach($u in $usernames){
 
   
@@ -109,7 +127,6 @@ write-host "Press any key to exit..."
 Write-Host "`n`n`n"
 
 $x = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-
 
 
 
